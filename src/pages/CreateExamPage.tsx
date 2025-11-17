@@ -1,44 +1,51 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Exam, Question, CLASSES } from '../types';
-import { storageUtils } from '../utils/storage';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Exam, Question, CLASSES, SUBJECTS_JUNIOR } from "../types";
+import { storageUtils } from "../utils/storage";
 
 export function CreateExamPage() {
   const navigate = useNavigate();
   const [exam, setExam] = useState<Partial<Exam>>({
-    title: '',
-    subject: '',
-    class: 'JSS1',
+    title: "",
+    subject: "",
+    class: "JSS1",
     timeLimit: 60,
-    startTime: '',
-    endTime: '',
+    startTime: "",
+    endTime: "",
     questions: [],
-    isPublished: false
+    isPublished: false,
   });
 
   const [currentQuestion, setCurrentQuestion] = useState<Partial<Question>>({
-    text: '',
-    options: ['', '', '', ''],
-    correctAnswer: 0
+    text: "",
+    options: ["", "", "", ""],
+    correctAnswer: 0,
   });
 
   const handleExamChange = (field: keyof Exam, value: any) => {
-    setExam(prev => ({ ...prev, [field]: value }));
+    setExam((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubjectChange = (field: keyof Exam, value: string) => {
+    setExam((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleQuestionChange = (field: keyof Question, value: any) => {
-    setCurrentQuestion(prev => ({ ...prev, [field]: value }));
+    setCurrentQuestion((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleOptionChange = (index: number, value: string) => {
-    const newOptions = [...(currentQuestion.options || ['', '', '', ''])];
+    const newOptions = [...(currentQuestion.options || ["", "", "", ""])];
     newOptions[index] = value;
-    setCurrentQuestion(prev => ({ ...prev, options: newOptions }));
+    setCurrentQuestion((prev) => ({ ...prev, options: newOptions }));
   };
 
   const addQuestion = () => {
-    if (!currentQuestion.text || !currentQuestion.options?.every(opt => opt.trim())) {
-      alert('Please fill in all question fields');
+    if (
+      !currentQuestion.text ||
+      !currentQuestion.options?.every((opt) => opt.trim())
+    ) {
+      alert("Please fill in all question fields");
       return;
     }
 
@@ -46,31 +53,37 @@ export function CreateExamPage() {
       id: Date.now().toString(),
       text: currentQuestion.text,
       options: currentQuestion.options,
-      correctAnswer: currentQuestion.correctAnswer || 0
+      correctAnswer: currentQuestion.correctAnswer || 0,
     };
 
-    setExam(prev => ({
+    setExam((prev) => ({
       ...prev,
-      questions: [...(prev.questions || []), question]
+      questions: [...(prev.questions || []), question],
     }));
 
     setCurrentQuestion({
-      text: '',
-      options: ['', '', '', ''],
-      correctAnswer: 0
+      text: "",
+      options: ["", "", "", ""],
+      correctAnswer: 0,
     });
   };
 
   const removeQuestion = (questionId: string) => {
-    setExam(prev => ({
+    setExam((prev) => ({
       ...prev,
-      questions: prev.questions?.filter(q => q.id !== questionId) || []
+      questions: prev.questions?.filter((q) => q.id !== questionId) || [],
     }));
   };
 
   const saveExam = () => {
-    if (!exam.title || !exam.subject || !exam.startTime || !exam.endTime || !exam.questions?.length) {
-      alert('Please fill in all required fields and add at least one question');
+    if (
+      !exam.title ||
+      !exam.subject ||
+      !exam.startTime ||
+      !exam.endTime ||
+      !exam.questions?.length
+    ) {
+      alert("Please fill in all required fields and add at least one question");
       return;
     }
 
@@ -78,18 +91,18 @@ export function CreateExamPage() {
       id: Date.now().toString(),
       title: exam.title,
       subject: exam.subject,
-      class: exam.class || 'JSS1',
+      class: exam.class || "JSS1",
       timeLimit: exam.timeLimit || 60,
       startTime: exam.startTime,
       endTime: exam.endTime,
       questions: exam.questions,
       isPublished: false,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     storageUtils.saveExam(newExam);
-    alert('Exam created successfully!');
-    navigate('/manage-exams');
+    alert("Exam created successfully!");
+    navigate("/manage-exams");
   };
 
   return (
@@ -98,7 +111,7 @@ export function CreateExamPage() {
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">Exam Details</h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -106,8 +119,8 @@ export function CreateExamPage() {
             </label>
             <input
               type="text"
-              value={exam.title || ''}
-              onChange={(e) => handleExamChange('title', e.target.value)}
+              value={exam.title || ""}
+              onChange={(e) => handleExamChange("title", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter exam title"
             />
@@ -117,13 +130,17 @@ export function CreateExamPage() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Subject *
             </label>
-            <input
-              type="text"
-              value={exam.subject || ''}
-              onChange={(e) => handleExamChange('subject', e.target.value)}
+            <select
+              value={exam.subject || "BST"}
+              onChange={(e) => handleSubjectChange("subject", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter subject"
-            />
+            >
+              {SUBJECTS_JUNIOR.map((cls) => (
+                <option key={cls} value={cls}>
+                  {cls}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -131,12 +148,14 @@ export function CreateExamPage() {
               Class *
             </label>
             <select
-              value={exam.class || 'JSS1'}
-              onChange={(e) => handleExamChange('class', e.target.value)}
+              value={exam.class || "JSS1"}
+              onChange={(e) => handleExamChange("class", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {CLASSES.map(cls => (
-                <option key={cls} value={cls}>{cls}</option>
+              {CLASSES.map((cls) => (
+                <option key={cls} value={cls}>
+                  {cls}
+                </option>
               ))}
             </select>
           </div>
@@ -148,7 +167,9 @@ export function CreateExamPage() {
             <input
               type="number"
               value={exam.timeLimit || 60}
-              onChange={(e) => handleExamChange('timeLimit', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleExamChange("timeLimit", parseInt(e.target.value))
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               min="1"
             />
@@ -160,8 +181,8 @@ export function CreateExamPage() {
             </label>
             <input
               type="datetime-local"
-              value={exam.startTime || ''}
-              onChange={(e) => handleExamChange('startTime', e.target.value)}
+              value={exam.startTime || ""}
+              onChange={(e) => handleExamChange("startTime", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -172,8 +193,8 @@ export function CreateExamPage() {
             </label>
             <input
               type="datetime-local"
-              value={exam.endTime || ''}
-              onChange={(e) => handleExamChange('endTime', e.target.value)}
+              value={exam.endTime || ""}
+              onChange={(e) => handleExamChange("endTime", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -182,14 +203,14 @@ export function CreateExamPage() {
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">Add Question</h2>
-        
+
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Question Text *
           </label>
           <textarea
-            value={currentQuestion.text || ''}
-            onChange={(e) => handleQuestionChange('text', e.target.value)}
+            value={currentQuestion.text || ""}
+            onChange={(e) => handleQuestionChange("text", e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={3}
             placeholder="Enter question text"
@@ -204,7 +225,7 @@ export function CreateExamPage() {
               </label>
               <input
                 type="text"
-                value={currentQuestion.options?.[index] || ''}
+                value={currentQuestion.options?.[index] || ""}
                 onChange={(e) => handleOptionChange(index, e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder={`Enter option ${String.fromCharCode(65 + index)}`}
@@ -219,7 +240,9 @@ export function CreateExamPage() {
           </label>
           <select
             value={currentQuestion.correctAnswer || 0}
-            onChange={(e) => handleQuestionChange('correctAnswer', parseInt(e.target.value))}
+            onChange={(e) =>
+              handleQuestionChange("correctAnswer", parseInt(e.target.value))
+            }
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {[0, 1, 2, 3].map((index) => (
@@ -243,9 +266,12 @@ export function CreateExamPage() {
           <h2 className="text-xl font-semibold mb-4">
             Questions ({exam.questions.length})
           </h2>
-          
+
           {exam.questions.map((question, index) => (
-            <div key={question.id} className="border-b border-gray-200 pb-4 mb-4 last:border-b-0">
+            <div
+              key={question.id}
+              className="border-b border-gray-200 pb-4 mb-4 last:border-b-0"
+            >
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-medium text-gray-900">
                   {index + 1}. {question.text}
@@ -263,8 +289,8 @@ export function CreateExamPage() {
                     key={optIndex}
                     className={`p-2 rounded ${
                       optIndex === question.correctAnswer
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100'
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100"
                     }`}
                   >
                     {String.fromCharCode(65 + optIndex)}. {option}
@@ -284,7 +310,7 @@ export function CreateExamPage() {
           Save Exam
         </button>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-md font-medium transition-colors"
         >
           Cancel

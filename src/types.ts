@@ -40,4 +40,20 @@ export const CLASSES = [
   'SS1', 'SS2', 'SS3'
 ] as const;
 
+
+export const SUBJECTS_JUNIOR = [
+  "Computer Science",
+  "English Language",
+  "Mathematics",
+  "Fine Art",
+  "Civic",
+  "History",
+  "PVS",
+  "BST",
+  "PHE",
+  "Yoruba",
+]
+
 export type ClassType = typeof CLASSES[number];
+
+// export interface Student

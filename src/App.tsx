@@ -1,10 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Layout } from './components/Layout';
-import { HomePage } from './pages/HomePage';
-import { CreateExamPage } from './pages/CreateExamPage';
-import { ManageExamsPage } from './pages/ManageExamsPage';
-import { TakeExamPage } from './pages/TakeExamPage';
-import { CheckResultsPage } from './pages/CheckResultsPage';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Layout } from "./components/Layout";
+import { HomePage } from "./pages/HomePage";
+import { CreateExamPage } from "./pages/CreateExamPage";
+import { ManageExamsPage } from "./pages/ManageExamsPage";
+import { TakeExamPage } from "./pages/TakeExamPage";
+import { CheckResultsPage } from "./pages/CheckResultsPage";
+import { RegisterStudentPage } from "./pages/RegisterStudent";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/manage-exams" element={<ManageExamsPage />} />
           <Route path="/take-exam" element={<TakeExamPage />} />
           <Route path="/check-results" element={<CheckResultsPage />} />
+          <Route path="/register-students" element={<RegisterStudentPage />} />
         </Routes>
       </Layout>
     </Router>
