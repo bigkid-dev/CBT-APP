@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Exam, ExamResult, CLASSES, Student } from "../types";
+import { CLASSES, Student, SUBJECTS } from "../types";
 import { storageUtils } from "../utils/storage";
 import {
   isExamActive,
@@ -80,7 +80,7 @@ export function RegisterTeacherPage() {
               onChange={(e) => setStudentClass(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {CLASSES.map((cls) => (
+              {SUBJECTS.map((cls) => (
                 <option key={cls} value={cls}>
                   {cls}
                 </option>

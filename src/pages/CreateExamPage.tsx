@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Exam, Question, CLASSES, SUBJECTS_JUNIOR } from "../types";
+import { Exam, Question, CLASSES, SUBJECTS } from "../types";
 import { storageUtils } from "../utils/storage";
 
 export function CreateExamPage() {
@@ -135,7 +135,7 @@ export function CreateExamPage() {
               onChange={(e) => handleSubjectChange("subject", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {SUBJECTS_JUNIOR.map((cls) => (
+              {SUBJECTS.map((cls) => (
                 <option key={cls} value={cls}>
                   {cls}
                 </option>

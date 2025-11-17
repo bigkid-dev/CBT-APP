@@ -3,6 +3,7 @@ import { Exam, ExamResult, Student } from "../types";
 const EXAMS_KEY = "cbt_exams";
 const RESULTS_KEY = "cbt_results";
 const STUDENTS_LIST_KEY = "bammy_students";
+const Teachers_LIST_KEY = "bammy_teachers";
 
 export const storageUtils = {
   // Exam operations
@@ -61,4 +62,10 @@ export const storageUtils = {
   getResultsByClass(className: string): ExamResult[] {
     return this.getResults().filter((r) => r.studentClass === className);
   },
+  getTeachers(): teacher{
+
+  },
+  registerTeacher(): void{
+
+  }
 };
