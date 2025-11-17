@@ -35,11 +35,7 @@ export interface StudentAnswer {
   selectedAnswer: number;
 }
 
-export const CLASSES = [
-  'JSS1', 'JSS2', 'JSS3',
-  'SS1', 'SS2', 'SS3'
-] as const;
-
+export const CLASSES = ["JSS1", "JSS2", "JSS3", "SS1", "SS2", "SS3"] as const;
 
 export const SUBJECTS_JUNIOR = [
   "Computer Science",
@@ -52,8 +48,12 @@ export const SUBJECTS_JUNIOR = [
   "BST",
   "PHE",
   "Yoruba",
-]
+];
 
-export type ClassType = typeof CLASSES[number];
+export type ClassType = (typeof CLASSES)[number];
 
-// export interface Student
+export interface Student {
+  firstname: string;
+  lastname: string;
+  class: string;
+}
