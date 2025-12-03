@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = "file:./dev.db"
+}
+
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+
+model Exam {
+  id        String  @id @default(cuid())
+  title     String
+  subject   String
+  class     String
+  timeLimit Int
+  startTime DateTime
+  endTime   DateTime
+  questions Question[]
+  results   ExamResult[]
+}
+
+model Question{
+  id            String  @id @default(cuid())
+  exam          Exam    @relation(fields: [examId], references: [id])
+  examId        String 
+  options       Json
+  correctAnswer Int
+  studentAnswer StudentAnswer[]
+}
+
+
+model ExamResult{                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+  id      String  @id @default(cuid())
+  examId  String  
+  exam    Exam  @relation(fields: [examId], references: [id])                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+  
+  studentId String
+  students Student @relation(fields: [studentId], references: [id])
+  
+  score   Int
+  studentClass String
+  totalQuestions String
+  dateTaken  DateTime @default(now())
+  timeTaken Int
+  answer    Json
+}
+
+model StudentAnswer{
+  id              String  @id @default(cuid())
+  selectedAnswer  Int
+
+  questionId      String
+  question        Question @relation(fields: [questionId], references: [id])
+}
+
+model Student{
+  id                 String @id @default(cuid())
+  firstName          String
+  lastName           String
+  class              String
+
+  result             ExamResult[]
+}
+
+model Teacher{
+  id                 String @id @default(cuid())
+  firstName          String
+  lastName           String
+  class              String
+  subjects           Json
+}
