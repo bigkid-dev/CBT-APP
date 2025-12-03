@@ -13,7 +13,8 @@ export function Layout({ children }: LayoutProps) {
     { path: '/create-exam', label: 'Create Exam' },
     { path: '/manage-exams', label: 'Manage Exams' },
     { path: '/take-exam', label: 'Take Test' },
-    { path: '/check-results', label: 'Check Results' }
+    { path: '/check-results', label: 'Check Results' },
+    { path: '/register-students', label: 'register' }
   ];
 
   return (

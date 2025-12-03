@@ -28,6 +28,12 @@ export function HomePage() {
       path: "/check-results",
       icon: LineChart,
     },
+    {
+      title: "Register Students",
+      description: "Register Student",
+      path: "/register-students",
+      icon: LineChart,
+    }
   ];
 
   return (

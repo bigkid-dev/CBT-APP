@@ -1,7 +1,9 @@
-import { Exam, ExamResult } from '../types';
+import { Exam, ExamResult, Student } from "../types";
 
-const EXAMS_KEY = 'cbt_exams';
-const RESULTS_KEY = 'cbt_results';
+const EXAMS_KEY = "cbt_exams";
+const RESULTS_KEY = "cbt_results";
+const STUDENTS_LIST_KEY = "bammy_students";
+const Teachers_LIST_KEY = "bammy_teachers";
 
 export const storageUtils = {
   // Exam operations
@@ -12,24 +14,24 @@ export const storageUtils = {
 
   saveExam(exam: Exam): void {
     const exams = this.getExams();
-    const existingIndex = exams.findIndex(e => e.id === exam.id);
-    
+    const existingIndex = exams.findIndex((e) => e.id === exam.id);
+
     if (existingIndex >= 0) {
       exams[existingIndex] = exam;
     } else {
       exams.push(exam);
     }
-    
+
     localStorage.setItem(EXAMS_KEY, JSON.stringify(exams));
   },
 
   deleteExam(examId: string): void {
-    const exams = this.getExams().filter(e => e.id !== examId);
+    const exams = this.getExams().filter((e) => e.id !== examId);
     localStorage.setItem(EXAMS_KEY, JSON.stringify(exams));
   },
 
   getExam(examId: string): Exam | undefined {
-    return this.getExams().find(e => e.id === examId);
+    return this.getExams().find((e) => e.id === examId);
   },
 
   // Result operations
@@ -43,12 +45,27 @@ export const storageUtils = {
     results.push(result);
     localStorage.setItem(RESULTS_KEY, JSON.stringify(results));
   },
+  getStudentsInfo(): Student[] {
+    const students = localStorage.getItem(STUDENTS_LIST_KEY);
+    return students ? JSON.parse(students) : [];
+  },
+  saveStudentinfo(student: Student): void {
+    const students = this.getStudentsInfo();
+    students.push(student);
+    localStorage.setItem(STUDENTS_LIST_KEY, JSON.stringify(students));
+  },
 
   getResultsByExam(examId: string): ExamResult[] {
-    return this.getResults().filter(r => r.examId === examId);
+    return this.getResults().filter((r) => r.examId === examId);
   },
 
   getResultsByClass(className: string): ExamResult[] {
-    return this.getResults().filter(r => r.studentClass === className);
+    return this.getResults().filter((r) => r.studentClass === className);
+  },
+  getTeachers(): teacher{
+
+  },
+  registerTeacher(): void{
+
   }
 };
